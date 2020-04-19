@@ -21,11 +21,11 @@ def validate():
     return jsonify({'validSudoku': sudoku.validate_board(board, value, row_index, col_index)})
 
 
-@app.route('/interpret', methods=['GET'])
+@app.route('/interpret', methods=['POST'])
 def interpret():
-    # TODO: get image of number
-    return jsonify({'number': 4})
+    image_data_url = request.json['image']
+    return jsonify({'number': int(interpreter.interpret(image_data_url))})
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, threaded=False)

@@ -8,7 +8,7 @@ const api = {
         return response.data;
     },
     getNumber: async (image) => {
-        const response = await axios.get(`${baseURL}/interpret`, {
+        const response = await axios.post(`${baseURL}/interpret`, {
             image: image,
         });
         return response.data;
