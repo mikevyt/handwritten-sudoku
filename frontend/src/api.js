@@ -13,6 +13,17 @@ const api = {
         });
         return response.data;
     },
+    validateEntry: async (board, value, rowIndex, columnIndex) => {
+        const response = await axios.post(`${baseURL}/board/validate`, {
+            entry: {
+                value,
+                rowIndex,
+                columnIndex,
+            },
+            board,
+        });
+        return response.data;
+    },
 };
 
 export default api;

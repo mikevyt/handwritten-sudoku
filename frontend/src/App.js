@@ -1,31 +1,49 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import './App.css';
 import api from './api';
 
 import SudokuBoard from './components/SudokuBoard/SudokuBoard';
+import Rules from './components/Rules/Rules';
 import CanvasDraw from 'react-canvas-draw';
 import ContextButtons from './components/ContextButtons/ContextButtons';
 
-const testBoard = [
-    [3, 0, 6, 5, 0, 8, 4, 0, 0],
-    [5, 2, 0, 0, 0, 0, 0, 0, 0],
-    [0, 8, 7, 0, 0, 0, 0, 3, 1],
-    [0, 0, 3, 0, 1, 0, 0, 8, 0],
-    [9, 0, 0, 8, 6, 3, 0, 0, 5],
-    [0, 5, 0, 0, 9, 0, 6, 0, 0],
-    [1, 3, 0, 0, 0, 0, 2, 5, 0],
-    [0, 0, 0, 0, 0, 0, 0, 7, 4],
-    [0, 0, 5, 2, 0, 6, 3, 0, 0],
-];
 function App() {
     const canvasRef = useRef(null);
     const [currentCell, setCurrentCell] = useState([null, null]);
-    // api.generateBoard().then((data) => (board = data.board));
+    const [board, setBoard] = useState(null);
+    const [error, setError] = useState(null);
 
-    const printUrl = () => {
+    useEffect(() => {
+        if (!board) {
+            api.getBoard().then((data) => setBoard(data.board));
+        }
+    });
+
+    const saveEntry = () => {
         if (canvasRef.current) {
             const image = canvasRef.current.canvasContainer.children[1].toDataURL();
-            api.getNumber(image).then((data) => console.log(data));
+            api.getNumber(image)
+                .then((data) =>
+                    api.validateEntry(
+                        board,
+                        data.number,
+                        currentCell[0],
+                        currentCell[1]
+                    )
+                )
+                .then((data) => {
+                    canvasRef.current.clear();
+                    if (data.validSudoku) {
+                        let incomingBoard = board;
+                        incomingBoard[currentCell[0]][currentCell[1]] =
+                            data.number;
+                        setBoard(incomingBoard);
+                        setCurrentCell([null, null]);
+                        setError(null);
+                    } else {
+                        setError(`Cannot place a ${data.number} in this cell!`);
+                    }
+                });
         }
     };
 
@@ -39,23 +57,25 @@ function App() {
         document.documentElement.clientHeight,
         window.innerHeight || 0
     );
-    const vw = Math.max(
-        document.documentElement.clientWidth,
-        window.innerWidth || 0
-    );
+
     return (
         <div className="App">
             <SudokuBoard
-                board={testBoard}
+                board={board || undefined}
                 currentCell={currentCell}
                 setCurrentCell={setCurrentCell}
             />
-            <CanvasDraw
-                ref={canvasRef}
-                canvasHeight={vh}
-                canvasWidth={vw - vh}
-            />
-            <ContextButtons onSave={printUrl} onReset={resetCanvas} />
+            <div className="right-container">
+                <h1>Sudoku</h1>
+                <Rules />
+                <div className="error">*{error}*</div>
+                <CanvasDraw
+                    ref={canvasRef}
+                    canvasHeight={vh / 2}
+                    canvasWidth={vh / 2}
+                />
+                <ContextButtons onSave={saveEntry} onReset={resetCanvas} />
+            </div>
         </div>
     );
 }

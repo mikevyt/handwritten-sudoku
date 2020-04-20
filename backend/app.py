@@ -13,12 +13,15 @@ def new_board():
     return jsonify({'board': sudoku.generate_board()})
 
 
-@app.route('/board/validate', methods=['GET'])
+@app.route('/board/validate', methods=['POST'])
 def validate():
     entry, board = request.json.values()
     value, row_index, col_index = entry.values()
 
-    return jsonify({'validSudoku': sudoku.validate_board(board, value, row_index, col_index)})
+    return jsonify({
+        'number': value,
+        'validSudoku': sudoku.validate_board(board, value, row_index, col_index)
+    })
 
 
 @app.route('/interpret', methods=['POST'])
