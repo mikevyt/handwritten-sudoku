@@ -15,12 +15,14 @@ const SudokuBoard = ({ board, currentCell, setCurrentCell }) =>
                                         ? 'selected'
                                         : ''
                                 }
+                                className={col < 0 ? 'given' : ''}
                                 key={colIndex}
-                                onClick={() =>
-                                    setCurrentCell([rowIndex, colIndex])
-                                }
+                                onClick={() => {
+                                    if (col >= 0)
+                                        setCurrentCell([rowIndex, colIndex]);
+                                }}
                             >
-                                {col !== 0 ? col : ''}
+                                {col !== 0 ? Math.abs(col) : ''}
                             </td>
                         ))}
                     </tr>

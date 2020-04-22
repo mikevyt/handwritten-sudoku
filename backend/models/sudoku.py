@@ -43,7 +43,7 @@ def _generate_complete_board(m=3):
     def search(c=0):
         i, j = divmod(c, n)
         i0, j0 = i - i % m, j - j % m
-        numbers = list(range(1, n + 1))
+        numbers = list(range(-n, 0))
         random.shuffle(numbers)
         for x in numbers:
             if (x not in board[i]
@@ -61,15 +61,13 @@ def _generate_complete_board(m=3):
 
 
 def validate_board(board: [[int]], value: int, row_index: int, col_index: int) -> bool:
-    #TODO: TEST
-    # check col
     for i in range(len(board)):
-        if board[i][col_index] == value:
+        if abs(board[i][col_index]) == value:
             return False
 
     # check row
     for j in range(len(board[row_index])):
-        if board[row_index][j] == value:
+        if abs(board[row_index][j]) == value:
             return False
 
     # check 3x3
@@ -77,7 +75,7 @@ def validate_board(board: [[int]], value: int, row_index: int, col_index: int) -
         row_index / 3) * 3, floor(col_index / 3) * 3
     for i in range(start_row_index, start_row_index + 3):
         for j in range(start_col_index, start_col_index + 3):
-            if board[i][j] == value:
+            if abs(board[i][j]) == value:
                 return False
 
     return True

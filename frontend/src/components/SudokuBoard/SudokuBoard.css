@@ -37,3 +37,7 @@ td:hover {
 #selected {
     background-color: lightgray;
 }
+
+.given {
+    color: grey;
+}

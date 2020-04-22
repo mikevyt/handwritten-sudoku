@@ -73,6 +73,7 @@ function App() {
                     ref={canvasRef}
                     canvasHeight={vh / 2}
                     canvasWidth={vh / 2}
+                    brushRadius={12}
                 />
                 <ContextButtons onSave={saveEntry} onReset={resetCanvas} />
             </div>
