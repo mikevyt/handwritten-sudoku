@@ -10,8 +10,10 @@ autopep8 = "*"
 [packages]
 flask = "*"
 flask-cors = "*"
-keras = "*"
 tensorflow = "*"
 
 [requires]
 python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true
