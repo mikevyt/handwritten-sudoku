@@ -2,7 +2,7 @@
 
 The classic game of Sudoku with handwritten digits. While tedious on a computer, this is actually pretty handy on a tablet.
 
-Using the MNIST handwriting dataset, I trained a CNN model to classify handwritten digits. I then created a React front end that could generate an image based on user input and pass it into the model through a Flask REST API.
+Using the MNIST handwriting dataset, I trained a CNN model to classify handwritten digits. I, then, created a React frontend that could generate an image based on user input and pass it onto the ML model through a Flask REST API.
 
 ## Demo
 
